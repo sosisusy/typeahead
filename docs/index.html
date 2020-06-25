@@ -5,11 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
+    <link rel="stylesheet" href="../dist/typeahead.css">
 </head>
 
 <body>
-    <input type="text" id="example" style="width:200px; padding:10px;" placeholder="텍스트 입력">
-    <script src="./index.js"></script>
+    <div>
+        <input type="text" id="example" style="width:200px; padding:10px;" placeholder="텍스트 입력">
+    </div>
+    <script src="../dist/typeahead.js"></script>
+    <script src="./variable.js"></script>
+    <script>
+        Typeahead({
+            target: "#example",
+            list: dummyStringList,
+            searchLimit: 10,
+            hint: true,
+        })
+    </script>
 </body>
 
 </html>

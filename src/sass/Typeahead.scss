@@ -1,0 +1,38 @@
+// 루트 컨테이너
+.so-typeahead-root {
+    position: relative;
+    display: inline-block;
+
+    // 텍스트 인풋 힌트
+    .so-typeahead-hint {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    // 목록 컨테이너
+    .so-typeahead-list {
+        display: none;
+        position: absolute;
+        top: calc(100% - 2px);
+        left: 0;
+        width: 100%;
+        z-index: 10000;
+        border: 1px solid #ddd;
+        background-color: white;
+
+        &.show {
+            display: block
+        }
+
+        // 목록 아이템
+        .so-typeahead-item {
+            padding: 5px 10px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}
