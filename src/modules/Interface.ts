@@ -1,35 +1,14 @@
-# Typeahead
 
-### TODO
-* 키보드로 힌트 오버하면 힌트가 변경되는데 마우스로 힌트에 오버시키면 힌트가 변경안되는 것 수정
-* 예제 파일 작성 마무리 (리스트 클래스 적용, onsearch 적용)
-
-### 소개
-typeahead는 텍스트 입력 인풋의 타이핑 도우미입니다.   
-타입스크립트로 작성이 되었지만 빌드된 js파일을 임포트해서 사용할 수도 있습니다.
-
-### 목차
-- [설치](#설치)
-- [구성](#구성)
-- [메소드](#메소드)
-- [예제](#예제)
-
-### 설치
-```typescript
-npm i 
-```
-
-### 구성
-```typescript
-{
+// 구성
+export interface SettingConfigure {
     // 인풋 대상 지정
     target: string | HTMLInputElement,
     // 검색 할 영역
     list?: Array<string> | Array<object>,
-    // 검색 할 영역 fetch
-    lazy?: string,
     // 검색 영역이 오브젝트 배열로 이루어졌을 경우 검색할 대상에 해당하는 속성을 지정
     key?: string,
+    // 검색 할 영역 fetch
+    lazy?: string,
     // 검색된 리스트 갯수가 searchLine이내로 들어올 경우 화면에 표시
     searchLimit?: Number,
 
@@ -69,9 +48,26 @@ npm i
      */
     onSelect?: Function,
 }
-```
 
-### 예제
-```typescript
 
-```
+export interface Configure extends SettingConfigure {
+    // selector 기록
+    // 루트 컨테이너 셀렉터
+    rootSelector?: string,
+    // 리스트 컨테이너 셀렉터
+    listSelector?: string,
+    // 힌트 셀렉터
+    hintSelector?: string,
+    // 인풋 셀렉터
+    inputSelector?: string,
+
+    // element 기록
+    // 루트 컨테이너 element
+    rootContainer?: HTMLElement,
+    // 리스트 컨테이너 element
+    listContainer?: HTMLElement,
+    // 힌트 element
+    hintElement?: HTMLElement,
+    // 인풋 element
+    inputElement?: HTMLInputElement,
+}

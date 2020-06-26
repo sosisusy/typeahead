@@ -1,94 +1,64 @@
-import _ from "lodash"
+import _, { merge } from "lodash"
+import Axios from "axios"
 import Utils from "./Utils"
+import { SettingConfigure, Configure } from "./Interface"
+import { DEFAULT_CONFIGURE, ClassNameList, AttributeList } from "./Config"
+import * as Event from "./Event"
 import "~/sass/Typeahead.scss"
 
-interface Configure {
-    // 인풋 대상 지정
-    target?: string | HTMLInputElement,
-    // 검색 할 영역
-    list?: Array<string> | Array<object>,
-    // 검색 영역이 오브젝트 배열로 이루어졌을 경우 검색할 대상에 해당하는 속성을 지정
-    key?: string,
-    // 인풋창에 힌트표시 여부
-    hint?: boolean,
-    // 힌트 색상
-    hintColor?: string,
-    // 검색된 리스트 갯수가 searchLine이내로 들어올 경우 화면에 표시
-    searchLimit?: Number,
-    // 아이템 글자 색상
-    itemColot?: string,
-    // 아이템 배경 색상
-    itemBackgroundColor?: string,
-    // 아이템 마우스 오버 글자 색상
-    itemHoverColor?: string
-    // 아이템 마우스 오버 배경 색상
-    itemHoverBackgroundColor?: string
-
-    //// 사용자정의 클래스 추가 ////
-    // 루트 컨테이너에 클래스 추가
-    addRootClass?: Array<string>,
-    // 검색 목록 컨테이너에 클래스 추가
-    addListClass?: Array<string>,
-    // 검색된 목록 아이템에 클래스 추가
-    addItemClass?: Array<string>,
-
-    //// 사용자 정의 리스너 ////
-    // 사용자 정의 검색
-    onSearch?: Function | null,
-    // 검색 리스트 중 타겟의 값과 같은 값이 있을 경우 호출
-    onEqual?: Function | null,
-}
-
-// 기본 값
-const DEFAULT_CONFIGURE: Configure = {
-    target: undefined,
-    list: [],
-    key: "",
-    hint: false,
-    hintColor: "#ececec",
-    searchLimit: 6,
-    itemColot: "#333",
-    itemBackgroundColor: "white",
-    itemHoverColor: "#8eadf3",
-    itemHoverBackgroundColor: "inherit",
-    addRootClass: [],
-    addListClass: [],
-    addItemClass: [],
-    onSearch: null,
-    onEqual: null,
-}
-
-// 클래스 이름 리스트
-const ClassNameList = {
-    root: "so-typeahead-root",
-    list: "so-typeahead-list",
-    item: "so-typeahead-item",
-    hint: "so-typeahead-hint",
-}
+let primaryIndex = 0
 
 // init
-function initialize(defaultConfigure: Configure, configure: Configure): Configure {
-    let mergeConfigure = { ...defaultConfigure, ...configure }
+function initialize(defaultConfigure: SettingConfigure, configure: SettingConfigure): Configure {
+    let mergeConfigure = { ...defaultConfigure, ...configure } as Configure
 
     mergeConfigure.target = Utils.findElement(mergeConfigure.target as HTMLInputElement | string)
 
     // 대상 없으면 에러
     if (!mergeConfigure.target) throw new Error("target not found")
 
+    // 데이터 url로 가져오기
+    if (mergeConfigure.lazy) {
+        Axios.get(mergeConfigure.lazy as string)
+            .then(res => {
+                mergeConfigure.list = res.data
+            })
+    }
+
+    // 검색 영역 없으면 에러
+    if (!mergeConfigure.list) throw new Error("search area not found")
+
     // 도우미 컨테이너 생성
     makeTypeheadContainer(mergeConfigure)
 
+    // element 셀렉터 기록
+    mergeConfigure.rootSelector = `.${ClassNameList.root}[${AttributeList.privateKey}="${primaryIndex}"]`
+    mergeConfigure.listSelector = `${mergeConfigure.rootSelector} .${ClassNameList.list}`
+    mergeConfigure.hintSelector = `${mergeConfigure.rootSelector} .${ClassNameList.hint}`
+    mergeConfigure.inputSelector = `${mergeConfigure.rootSelector} .${ClassNameList.input}`
+
+    // element 기록
+    mergeConfigure.rootContainer = document.querySelector(mergeConfigure.rootSelector) as HTMLElement
+    mergeConfigure.listContainer = document.querySelector(mergeConfigure.listSelector) as HTMLElement
+    mergeConfigure.hintElement = document.querySelector(mergeConfigure.hintSelector) as HTMLElement
+    mergeConfigure.inputElement = document.querySelector(mergeConfigure.inputSelector) as HTMLInputElement
+
+
+    primaryIndex++
     return mergeConfigure
 }
 
 // 타이핑 도우미 컨테이너 생성
-function makeTypeheadContainer(configure: Configure) {
+function makeTypeheadContainer(configure: SettingConfigure) {
     const target = configure.target as HTMLInputElement,
         targetParent = target.parentNode as HTMLElement,
         targetStyle = window.getComputedStyle(target),
         targetFontSize = Utils.getStyleValue(targetStyle, "font-size"),
         targetFontFamily = Utils.getStyleValue(targetStyle, "font-family"),
-        targetFontWeight = Utils.getStyleValue(targetStyle, "font-weight")
+        targetFontWeight = Utils.getStyleValue(targetStyle, "font-weight"),
+        targetPadding = Utils.getStyleValue(targetStyle, "padding"),
+        targetBorder = Utils.getStyleValue(targetStyle, "border"),
+        { width: targetWdith } = target.getBoundingClientRect()
 
     const addClassList = {
         root: (configure.addRootClass as Array<string>).join(" "),
@@ -97,18 +67,35 @@ function makeTypeheadContainer(configure: Configure) {
 
     const rootContainer = document.createElement("div"),
         listContainer = document.createElement("div"),
-        hintElement = document.createElement("span")
+        content = document.createElement("div"),
+        hintElement = document.createElement("span"),
+        inputElement = target.cloneNode() as HTMLInputElement
 
 
     // 노드 추가
     targetParent.appendChild(rootContainer)
-    rootContainer.appendChild(listContainer)
-    rootContainer.appendChild(hintElement)
-    rootContainer.appendChild(target)
+    rootContainer.appendChild(content)
+    content.appendChild(listContainer)
+    content.appendChild(target)
+    content.appendChild(hintElement)
+
+    // 힌트 표시여부
+    if (configure.hint) {
+        target.style.color = "transparent"
+        target.placeholder = ""
+        content.appendChild(inputElement)
+    } else {
+        hintElement.style.display = "none"
+    }
 
     // root container
     rootContainer.classList.add(ClassNameList.root)
     if (addClassList.root) rootContainer.classList.add(addClassList.root)
+    rootContainer.setAttribute(AttributeList.privateKey, primaryIndex.toString())
+    rootContainer.style.width = targetWdith + "px"
+
+    // content
+    content.classList.add(ClassNameList.content)
 
     // list container
     listContainer.classList.add(ClassNameList.list)
@@ -120,41 +107,17 @@ function makeTypeheadContainer(configure: Configure) {
     hintElement.style.fontSize = targetFontSize
     hintElement.style.fontFamily = targetFontFamily
     hintElement.style.fontWeight = targetFontWeight
+    hintElement.style.padding = targetPadding
+    hintElement.style.border = targetBorder
+    hintElement.style.borderColor = "transparent"
+    hintElement.addEventListener("click", () => target.select())
 
-}
-// 오브젝트형 리스트 아이템 추가
-function appendListItem(type: string, value: any, configure: Configure) {
-    const addClass = (configure.addItemClass as Array<string>).join(" "),
-        findKey = configure.key as string
+    // input element
+    inputElement.removeAttribute("id")
+    inputElement.classList.add(ClassNameList.input)
+    inputElement.style.borderColor = "transparent"
+    inputElement.style.backgroundColor = "transparent"
 
-    const listContainer = document.querySelector(`.${ClassNameList.list}`) as HTMLElement,
-        item = document.createElement("div")
-
-    item.classList.add(ClassNameList.item)
-    if (addClass) item.classList.add(addClass)
-
-    switch (type) {
-        case "string":
-            item.innerHTML = value
-            break
-        case "object":
-            if (findKey) item.innerHTML = value[findKey]
-            break
-        default:
-            return
-    }
-
-    listContainer.appendChild(item)
-}
-
-// 찾은 데이터 표시
-function showSearchData(findList: Array<any>, configure: Configure) {
-    const listContainer = document.querySelector(`.${ClassNameList.list}`) as HTMLElement
-
-    listContainer.classList.add("show")
-    listContainer.innerHTML = ""
-
-    _.map(findList, item => appendListItem(typeof findList[0], item, configure))
 }
 
 export default function (configure: Configure) {
@@ -162,16 +125,27 @@ export default function (configure: Configure) {
     // 사용될 값
     const CONFIGURE = initialize(DEFAULT_CONFIGURE, configure)
 
-    // 텍스트 인풋
-    const target = CONFIGURE.target as HTMLInputElement,
+    // 
+    const rootContainer = CONFIGURE.rootContainer as HTMLElement,
+        listContainer = CONFIGURE.listContainer as HTMLElement,
+        hintElement = CONFIGURE.hintElement as HTMLInputElement,
+        target = CONFIGURE.inputElement as HTMLInputElement || CONFIGURE.target as HTMLInputElement,
         searchList = CONFIGURE.list as Array<string> | Array<object>
 
+    let targetValue = "",
+        hoverItemIndex = -1,
+        findList = [] as Array<string> | Array<object>
+
     // 텍스트 입력 핸들
-    const handleSearch = () => {
-        let findList = [],
-            findKey = CONFIGURE.key as string,
-            searchLimit = CONFIGURE.searchLimit as Number,
-            targetValue = target.value.toLowerCase()
+    const handleSearch = (e: Event) => {
+        let findKey = CONFIGURE.key as string,
+            searchLimit = CONFIGURE.searchLimit as Number
+
+        // 클론 인풋에 값복사
+        if (CONFIGURE.inputElement) CONFIGURE.inputElement.value = target.value
+        hintElement.innerHTML = ""
+
+        targetValue = target.value.toLowerCase()
 
         switch (typeof searchList[0]) {
             case "string":
@@ -184,21 +158,78 @@ export default function (configure: Configure) {
                 return
         }
 
+        // 사용자 정의 함수 호출
+        if (CONFIGURE.onSearch) CONFIGURE.onSearch(findList)
+
         // 검색 허용 갯수 초과시, 검색된 내용 없을 시
         if (findList.length > searchLimit || findList.length == 0) {
-            handleBlur()
+            Event.hideListContainer(CONFIGURE)
             return
         }
 
-        showSearchData(findList, CONFIGURE)
+        // 검색된 데이터 표시
+        Event.showSearchData(findList, CONFIGURE)
+
+        // 힌트 기록
+        let itemString = (listContainer as HTMLElement).children[0].getAttribute(AttributeList.itemValue) as string
+        hintElement.innerHTML = Utils.replaceString(itemString, target.value)
     }
 
+    // keydown 핸들러
+    const handleKeyDown = (e: KeyboardEvent) => {
+        const listChildren = listContainer.children,
+            hoverListItem = listContainer.querySelector(`.${ClassNameList.item}.hover`) as HTMLElement
+
+        let isSelect
+        hoverItemIndex = Utils.findHoverListItemIndex(listChildren, hoverListItem) ?? -1
+
+        switch (e.key) {
+            case "ArrowUp":
+                e.preventDefault()
+                hoverItemIndex -= 1
+                break
+            case "ArrowDown":
+                e.preventDefault()
+                hoverItemIndex += 1
+                break
+            case "Enter":
+                e.preventDefault()
+                isSelect = Event.selectListItem(findList[hoverItemIndex], CONFIGURE)
+                if (isSelect) {
+                    target.blur()
+                    Event.hideListContainer(CONFIGURE)
+                }
+                break
+        }
+
+        if (hoverItemIndex < 0 || hoverItemIndex >= findList.length) return
+
+        let hoverItem = listChildren[hoverItemIndex] as HTMLElement
+
+        // 검색 리스트 리렌더링
+        Event.applyAllListItemStyle(CONFIGURE)
+        Event.applyListItemHoverStyle(hoverItem, CONFIGURE)
+
+        // 힌트 기록
+        let itemString = hoverItem.getAttribute(AttributeList.itemValue) as string
+        if (!isSelect) hintElement.innerHTML = Utils.replaceString(itemString, target.value)
+
+        return false
+    }
+
+    // 포커스 아웃
     const handleBlur = () => {
-        const listContainer = document.querySelector(`.${ClassNameList.list}`) as HTMLElement
-        listContainer.classList.remove("show")
+        // const listChildren = listContainer.children,
+        //     hoverListItem = listContainer.querySelector(`.${ClassNameList.item}.hover`) as HTMLElement
+
+        // hoverItemIndex = Utils.findHoverListItemIndex(listChildren, hoverListItem) ?? -1
+        // Event.selectListItem(findList[hoverItemIndex], CONFIGURE)
+        Event.hideListContainer(CONFIGURE)
     }
 
+    // 인풋 이벤트 등록
     target.addEventListener("focus", handleSearch)
     target.addEventListener("input", handleSearch)
+    target.addEventListener("keydown", handleKeyDown)
     target.addEventListener("blur", handleBlur)
 }
