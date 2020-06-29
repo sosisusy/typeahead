@@ -114,7 +114,6 @@ function makeTypeheadContainer(configure: SettingConfigure) {
     inputElement.classList.add(ClassNameList.input)
     inputElement.style.borderColor = "transparent"
     inputElement.style.backgroundColor = "transparent"
-
 }
 
 export default function (configure: Configure) {

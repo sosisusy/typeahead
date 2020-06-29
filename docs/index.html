@@ -5,19 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
-    <!-- <link rel="stylesheet" href="../dist/typeahead.css"> -->
-    <link rel="stylesheet" href="./typeahead.min.css">
+    <link rel="stylesheet" href="../dist/typeahead.css">
+    <!-- <link rel="stylesheet" href="./typeahead.min.css"> -->
     <style>
         .custom-item {
             padding: 10px;
             font-family: sans-serif;
-            background-color: black !important;
-            color: white !important;
-        }
-
-        .custom-item:hover {
-            background-color: white !important;
-            color: black !important;
         }
 
         .custom-list {
@@ -35,8 +28,8 @@
     </div>
     <code id="variableView">
     </code>
-    <!-- <script src="../dist/typeahead.js"></script> -->
-    <script src="./typeahead.min.js"></script>
+    <script src="../dist/typeahead.js"></script>
+    <!-- <script src="./typeahead.min.js"></script> -->
     <script src="./variable.js"></script>
     <script>
         Typeahead({
@@ -62,10 +55,10 @@
             searchLimit: 20,
             hint: true,
             hintColor: "red",
-            itemColor: "#89a3e0",
-            itemBackgroundColor: "white",
-            itemHoverColor: "white",
-            itemHoverBackgroundColor: "#89a3e0",
+            itemColor: "white",
+            itemBackgroundColor: "black",
+            itemHoverColor: "black",
+            itemHoverBackgroundColor: "white",
             addItemClass: ["custom-item"],
             addListClass: ["custom-list"],
             onSearch: function (items) {
