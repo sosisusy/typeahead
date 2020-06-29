@@ -5,6 +5,7 @@ declare class Utils {
     findObjectItem(list: Array<any>, value: string, key: string): Array<any>;
     findHoverListItemIndex(collection: HTMLCollection, target: HTMLElement): number | null;
     getStyleValue(styleProperties: CSSStyleDeclaration, styleAttribute: string): string;
+    getListData(url: string): Promise<any>;
     replaceString(value: string, replace: string): string;
 }
 declare const _default: Utils;

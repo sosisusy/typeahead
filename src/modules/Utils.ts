@@ -1,5 +1,6 @@
 import _ from "lodash"
 import { ClassNameList } from "./Config"
+import Axios from "axios"
 
 class Utils {
 
@@ -46,10 +47,19 @@ class Utils {
         return styleProperties.getPropertyValue(styleAttribute)
     }
 
+    // 리스트 데이터 가져오기
+    async getListData(url: string) {
+        return await Axios.get(url)
+            .then(res => {
+                return res.data
+            })
+    }
+
     // 문자열 교체
     replaceString(value: string, replace: string): string {
         return replace + value.substr(replace.length, value.length)
     }
+
 }
 
 export default new Utils

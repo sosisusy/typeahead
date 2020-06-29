@@ -20,14 +20,21 @@ export const applyAllListItemStyle = (configure: Configure) => {
 
 // 리스트 아이템 마우스오버 스타일 적용
 export const applyListItemHoverStyle = (item: HTMLElement, configure: Configure) => {
+    const hintElement = configure.hintElement as HTMLElement,
+        target = configure.inputElement || configure.target as HTMLInputElement
+
     item.classList.add("hover")
     item.style.color = configure.itemHoverColor as string
     item.style.backgroundColor = configure.itemHoverBackgroundColor as string
+
+    // 힌트 기록
+    let itemString = item.getAttribute(AttributeList.itemValue) as string
+    hintElement.innerHTML = Utils.replaceString(itemString, target.value)
 }
 
 // 리스트 아이템 추가
 export const appendListItem = (type: string, value: any, configure: Configure) => {
-    const addClass = (configure.addItemClass as Array<string>).join(" "),
+    const addClass = configure.addItemClass as Array<string>,
         findKey = configure.key as string
 
     const listContainer = configure.listContainer as HTMLElement,
@@ -35,7 +42,7 @@ export const appendListItem = (type: string, value: any, configure: Configure) =
 
     // 클래스 설정
     item.classList.add(ClassNameList.item)
-    if (addClass) item.classList.add(addClass)
+    if (addClass) _.map(addClass, (customClass) => item.classList.add(customClass))
 
     // 스타일 설정
     applyListItemStyle(item, configure)
@@ -110,7 +117,7 @@ export const selectListItem = (item: any, configure: Configure): boolean => {
             break
     }
 
-    hideListContainer(configure)
+    // hideListContainer(configure)
 
     // 사용자 정의 함수 호출
     if (configure.onSelect) configure.onSelect(item)

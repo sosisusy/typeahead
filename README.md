@@ -1,7 +1,6 @@
 # Typeahead
 
 ### TODO
-* 키보드로 힌트 오버하면 힌트가 변경되는데 마우스로 힌트에 오버시키면 힌트가 변경안되는 것 수정
 * 예제 파일 작성 마무리 (리스트 클래스 적용, onsearch 적용)
 
 ### 소개
@@ -10,13 +9,49 @@ typeahead는 텍스트 입력 인풋의 타이핑 도우미입니다.
 
 ### 목차
 - [설치](#설치)
-- [구성](#구성)
-- [메소드](#메소드)
+- [import](#import)
 - [예제](#예제)
+- [구성](#구성)
 
 ### 설치
 ```typescript
-npm i 
+npm i so-typeahead
+```
+
+### import
+#### HTML
+```html
+<link rel="stylesheet" href="your/path/dist/typeahead.min.css">
+<script src="your/path/dist/typeahead.min.js">
+```
+#### typescript
+```typescript
+import Typeahead from "so-typeahead"
+```
+
+### 예제
+```typescript
+Typeahead({
+    target: "#example3",                                    // 타겟 설정
+    // list: dummyObjectList,                               // 검색 영역 설정
+    lazy: "https://jsonplaceholder.typicode.com/photos",    // 검색 영역 설정 (fetch)
+    key: "title",                                           // 검색 영역이 오브젝트 배열로 이루어졌다면 키 값 설정
+    searchLimit: 20,                                        // 0 < 값 <= limit 범위 안에 포함할 경우에만 리스트 표시
+    hint: true,                                             // 인풋 힌트 사용유무
+    hintColor: "red",                                       // 힌트 색상 지정
+    itemColor: "#89a3e0",                                   // 리스트 아이템 색상 지정
+    itemBackgroundColor: "white",                           // 리스트 아이템 배경 색상 지정
+    itemHoverColor: "white",                                // 리스트 아이템 마우스 오버 시 색상 지정
+    itemHoverBackgroundColor: "#89a3e0",                    // 리스트 아이템 마우스 오버 시 배경 색상 지정
+    addItemClass: ["custom-item"],                          // 리스트 아이템 클래스 추가
+    addListClass: ["custom-list"],                          // 리스트 컨테이너 클래스 추가
+    onSearch: function (items) {                            // 검색 시 호출
+        console.log(items)                                  // 검색된 리스트 반환
+    },
+    onSelect: function (item) {                             // 리스트 아이템 선택 시 호출
+        console.log(item)                                   // 선택된 아이템 반환
+    },
+})
 ```
 
 ### 구성
@@ -69,9 +104,4 @@ npm i
      */
     onSelect?: Function,
 }
-```
-
-### 예제
-```typescript
-
 ```

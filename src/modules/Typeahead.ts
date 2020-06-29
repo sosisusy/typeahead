@@ -19,10 +19,7 @@ function initialize(defaultConfigure: SettingConfigure, configure: SettingConfig
 
     // 데이터 url로 가져오기
     if (mergeConfigure.lazy) {
-        Axios.get(mergeConfigure.lazy as string)
-            .then(res => {
-                mergeConfigure.list = res.data
-            })
+        Utils.getListData(mergeConfigure.lazy).then(res => mergeConfigure.list = res)
     }
 
     // 검색 영역 없으면 에러
@@ -61,8 +58,8 @@ function makeTypeheadContainer(configure: SettingConfigure) {
         { width: targetWdith } = target.getBoundingClientRect()
 
     const addClassList = {
-        root: (configure.addRootClass as Array<string>).join(" "),
-        list: (configure.addListClass as Array<string>).join(" "),
+        root: configure.addRootClass as Array<string>,
+        list: configure.addListClass as Array<string>,
     }
 
     const rootContainer = document.createElement("div"),
@@ -90,7 +87,7 @@ function makeTypeheadContainer(configure: SettingConfigure) {
 
     // root container
     rootContainer.classList.add(ClassNameList.root)
-    if (addClassList.root) rootContainer.classList.add(addClassList.root)
+    if (addClassList.root) _.map(addClassList.root, (customClass) => rootContainer.classList.add(customClass))
     rootContainer.setAttribute(AttributeList.privateKey, primaryIndex.toString())
     rootContainer.style.width = targetWdith + "px"
 
@@ -99,7 +96,7 @@ function makeTypeheadContainer(configure: SettingConfigure) {
 
     // list container
     listContainer.classList.add(ClassNameList.list)
-    if (addClassList.list) listContainer.classList.add(addClassList.list)
+    if (addClassList.list) _.map(addClassList.list, (customClass) => listContainer.classList.add(customClass))
 
     // hint element
     hintElement.classList.add(ClassNameList.hint)
@@ -129,8 +126,7 @@ export default function (configure: Configure) {
     const rootContainer = CONFIGURE.rootContainer as HTMLElement,
         listContainer = CONFIGURE.listContainer as HTMLElement,
         hintElement = CONFIGURE.hintElement as HTMLInputElement,
-        target = CONFIGURE.inputElement as HTMLInputElement || CONFIGURE.target as HTMLInputElement,
-        searchList = CONFIGURE.list as Array<string> | Array<object>
+        target = CONFIGURE.inputElement as HTMLInputElement || CONFIGURE.target as HTMLInputElement
 
     let targetValue = "",
         hoverItemIndex = -1,
@@ -138,6 +134,7 @@ export default function (configure: Configure) {
 
     // 텍스트 입력 핸들
     const handleSearch = (e: Event) => {
+        const searchList = CONFIGURE.list as Array<string> | Array<object>
         let findKey = CONFIGURE.key as string,
             searchLimit = CONFIGURE.searchLimit as Number
 
@@ -194,10 +191,8 @@ export default function (configure: Configure) {
                 break
             case "Enter":
                 e.preventDefault()
-                isSelect = Event.selectListItem(findList[hoverItemIndex], CONFIGURE)
-                if (isSelect) {
+                if (findList[hoverItemIndex]) {
                     target.blur()
-                    Event.hideListContainer(CONFIGURE)
                 }
                 break
         }
@@ -212,18 +207,18 @@ export default function (configure: Configure) {
 
         // 힌트 기록
         let itemString = hoverItem.getAttribute(AttributeList.itemValue) as string
-        if (!isSelect) hintElement.innerHTML = Utils.replaceString(itemString, target.value)
+        hintElement.innerHTML = Utils.replaceString(itemString, target.value)
 
         return false
     }
 
     // 포커스 아웃
     const handleBlur = () => {
-        // const listChildren = listContainer.children,
-        //     hoverListItem = listContainer.querySelector(`.${ClassNameList.item}.hover`) as HTMLElement
+        const listChildren = listContainer.children,
+            hoverListItem = listContainer.querySelector(`.${ClassNameList.item}.hover`) as HTMLElement
 
-        // hoverItemIndex = Utils.findHoverListItemIndex(listChildren, hoverListItem) ?? -1
-        // Event.selectListItem(findList[hoverItemIndex], CONFIGURE)
+        hoverItemIndex = Utils.findHoverListItemIndex(listChildren, hoverListItem) ?? -1
+        Event.selectListItem(findList[hoverItemIndex], CONFIGURE)
         Event.hideListContainer(CONFIGURE)
     }
 

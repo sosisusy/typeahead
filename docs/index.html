@@ -5,13 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
-    <link rel="stylesheet" href="../dist/typeahead.css">
-    <!-- <link rel="stylesheet" href="./typeahead.min.css"> -->
+    <!-- <link rel="stylesheet" href="../dist/typeahead.css"> -->
+    <link rel="stylesheet" href="./typeahead.min.css">
     <style>
         .custom-item {
             padding: 10px;
             font-family: sans-serif;
+            background-color: black !important;
+            color: white !important;
+        }
 
+        .custom-item:hover {
+            background-color: white !important;
+            color: black !important;
+        }
+
+        .custom-list {
+            padding: 20px;
+            background-color: skyblue !important;
         }
     </style>
 </head>
@@ -20,10 +31,12 @@
     <div style="display:grid;grid-template-columns: 100%; grid-gap: 20px;">
         <input type="text" id="example" style="width:200px; padding:10px;" placeholder="텍스트 입력">
         <input type="text" id="example2" style="width:200px; padding:10px;" placeholder="텍스트 입력">
-        <input type="text" id="example3" style="width:200px; padding:10px;" placeholder="텍스트 입력">
+        <input type="text" id="example3" style="width:600px; padding:10px;" placeholder="텍스트 입력">
     </div>
-    <script src="../dist/typeahead.js"></script>
-    <!-- <script src="./typeahead.min.js"></script> -->
+    <code id="variableView">
+    </code>
+    <!-- <script src="../dist/typeahead.js"></script> -->
+    <script src="./typeahead.min.js"></script>
     <script src="./variable.js"></script>
     <script>
         Typeahead({
@@ -43,7 +56,9 @@
         })
         Typeahead({
             target: "#example3",
-            list: dummyStringList,
+            // list: dummyObjectList,
+            lazy: "https://jsonplaceholder.typicode.com/photos",
+            key: "title",
             searchLimit: 20,
             hint: true,
             hintColor: "red",
@@ -53,9 +68,12 @@
             itemHoverBackgroundColor: "#89a3e0",
             addItemClass: ["custom-item"],
             addListClass: ["custom-list"],
+            onSearch: function (items) {
+                console.log(items)
+            },
             onSelect: function (item) {
                 console.log(item)
-            }
+            },
         })
     </script>
 </body>
