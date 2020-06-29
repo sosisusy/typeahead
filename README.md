@@ -4,6 +4,9 @@
 typeahead는 텍스트 입력 인풋의 타이핑 도우미입니다.   
 타입스크립트로 작성이 되었지만 빌드된 js파일을 임포트해서 사용할 수도 있습니다.
 
+#### 데모
+* [데모페이지](https://sosisusy.github.io/typeahead/)
+
 ### 목차
 - [설치](#설치)
 - [import](#import)
