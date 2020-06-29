@@ -1,5 +1,4 @@
-import _, { merge } from "lodash"
-import Axios from "axios"
+import _ from "lodash"
 import Utils from "./Utils"
 import { SettingConfigure, Configure } from "./Interface"
 import { DEFAULT_CONFIGURE, ClassNameList, AttributeList } from "./Config"
@@ -176,8 +175,7 @@ export default function (configure: Configure) {
         const listChildren = listContainer.children,
             hoverListItem = listContainer.querySelector(`.${ClassNameList.item}.hover`) as HTMLElement
 
-        let isSelect
-        hoverItemIndex = Utils.findHoverListItemIndex(listChildren, hoverListItem) ?? -1
+        let hoverItemIndex = Utils.findHoverListItemIndex(listChildren, hoverListItem) ?? -1
 
         switch (e.key) {
             case "ArrowUp":
