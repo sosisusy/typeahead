@@ -1,6 +1,6 @@
 {
   "name": "so-typeahead",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "타이핑 힌트 표시해주는 라이브러리",
   "main": "./src/index.ts",
   "types": "./lib/index.d.ts",
@@ -24,13 +24,10 @@
     "@babel/core": "^7.10.3",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/preset-env": "^7.10.3",
-    "@types/lodash": "^4.14.157",
-    "axios": "^0.19.2",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "cross-env": "^7.0.2",
     "css-loader": "^3.6.0",
-    "lodash": "^4.17.15",
     "sass": "^1.26.9",
     "sass-loader": "^8.0.2",
     "ts-loader": "^7.0.5",
@@ -39,5 +36,9 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@types/lodash": "^4.14.157",
+    "lodash": "^4.17.15",
+    "axios": "^0.19.2"
+  }
 }
