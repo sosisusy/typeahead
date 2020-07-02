@@ -34,3 +34,4 @@ export interface Configure extends SettingConfigure {
     hintElement?: HTMLElement;
     inputElement?: HTMLInputElement;
 }
+//# sourceMappingURL=Interface.d.ts.map

@@ -1,8 +1,8 @@
 {
   "name": "so-typeahead",
-  "version": "1.0.8",
+  "version": "1.0.14",
   "description": "타이핑 힌트 표시해주는 라이브러리",
-  "main": "./src/index.ts",
+  "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
@@ -37,8 +37,9 @@
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/lodash": "^4.14.157",
-    "lodash": "^4.17.15",
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "lodash": "^4.17.15"
   }
 }

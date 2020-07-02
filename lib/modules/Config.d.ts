@@ -12,3 +12,4 @@ export declare const AttributeList: {
     privateKey: string;
     itemValue: string;
 };
+//# sourceMappingURL=Config.d.ts.map

@@ -3,7 +3,6 @@ import Utils from "./Utils"
 import { SettingConfigure, Configure } from "./Interface"
 import { DEFAULT_CONFIGURE, ClassNameList, AttributeList } from "./Config"
 import * as Event from "./Event"
-import "~/sass/Typeahead.scss"
 
 let primaryIndex = 0
 

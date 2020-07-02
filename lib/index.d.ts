@@ -5,3 +5,4 @@ declare global {
     }
 }
 export default Typeahead;
+//# sourceMappingURL=index.d.ts.map
