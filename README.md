@@ -84,4 +84,4 @@ Typeahead({
 | 속성 | 타입 | 파라미터 | 기본값 | 설명 |
 |------|-----|-----|-------|-----|
 |onSearch|`Function`|`Array<any>`|`undefined`|검색된 리스트가 있을 경우 호출|
-|onSearch|`Function`|`string` or `object`|`undefined`|검색된 아이템 선택 시 호출|
+|onSelect|`Function`|`string` or `object`|`undefined`|검색된 아이템 선택 시 호출|
