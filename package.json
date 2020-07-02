@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
     "prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch"
+    "watch": "cross-env NODE_ENV=development webpack --config webpack.config.js --watch",
+    "patch": "npm version patch"
   },
   "repository": {
     "type": "git",
