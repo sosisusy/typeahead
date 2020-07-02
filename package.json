@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/sosisusy/typeahead/issues"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "homepage": "https://github.com/sosisusy/typeahead#readme",
   "devDependencies": {
     "@babel/core": "^7.10.3",
