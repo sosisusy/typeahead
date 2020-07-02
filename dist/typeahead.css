@@ -1,4 +1,2 @@
 .so-typeahead-root{display:inline-block}.so-typeahead-root .so-typeahead-input-content{position:relative;display:inline-block}.so-typeahead-root .so-typeahead-input-content .so-typeahead-hint{position:absolute;top:50%;left:0;transform:translate(0, -50%);transform:translate(0, -50%)}.so-typeahead-root .so-typeahead-input-content .so-typeahead-input{position:absolute;top:50%;left:0;transform:translate(0, -50%);z-index:1}.so-typeahead-root .so-typeahead-input-content .so-typeahead-list{display:none;position:absolute;top:calc(100% - 2px);left:0;width:100%;z-index:10000;border:1px solid #ddd;background-color:white;box-sizing:border-box}.so-typeahead-root .so-typeahead-input-content .so-typeahead-list.show{display:block}.so-typeahead-root .so-typeahead-input-content .so-typeahead-list .so-typeahead-item{padding:5px 10px}.so-typeahead-root .so-typeahead-input-content .so-typeahead-list .so-typeahead-item:hover{cursor:pointer}
 
-
-/*# sourceMappingURL=typeahead.css.map*/

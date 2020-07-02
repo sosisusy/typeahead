@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
-    <!-- <link rel="stylesheet" href="../dist/typeahead.css"> -->
-    <link rel="stylesheet" href="./typeahead.min.css">
+    <link rel="stylesheet" href="../dist/typeahead.css">
+    <!-- <link rel="stylesheet" href="./typeahead.min.css"> -->
     <style>
         .custom-item {
             padding: 10px;
@@ -22,14 +22,26 @@
 
 <body>
     <div style="display:grid;grid-template-columns: 100%; grid-gap: 20px;">
-        <input type="text" id="example" style="width:200px; padding:10px;" placeholder="텍스트 입력">
-        <input type="text" id="example2" style="width:200px; padding:10px;" placeholder="텍스트 입력">
-        <input type="text" id="example3" style="width:600px; padding:10px;" placeholder="텍스트 입력">
+        <span>검색:"Abilene",
+            "Akron", "Albany", "Albuquerque", "Alexandria", "Allentown", "Amarillo", "Anaheim", "Anchorage", "Ann
+            Arbor", "Antioch", "Apple Valley", "Appleton", "Arlington", "Arvada", "Asheville", "Athens", "Atlanta",
+            "Atlantic City", "Augusta", "Aurora", "Austin"...</span>
+        <div>
+            <input type="text" id="example" style="width:200px; padding:10px;" placeholder="텍스트 입력">
+        </div>
+        <div>
+            <input type="text" id="example2" style="width:200px; padding:10px;" placeholder="텍스트 입력">
+        </div>
+        <span>검색:"accusamus beatae ad facilis cum similique qui sunt", "officia porro iure quia iusto qui ipsa ut
+            modi"...</span>
+        <div>
+            <input type="text" id="example3" style="width:600px; padding:10px;" placeholder="텍스트 입력">
+        </div>
     </div>
     <code id="variableView">
     </code>
-    <!-- <script src="../dist/typeahead.js"></script> -->
-    <script src="./typeahead.min.js"></script>
+    <script src="../dist/typeahead.js"></script>
+    <!-- <script src="./typeahead.min.js"></script> -->
     <script src="./variable.js"></script>
     <script>
         Typeahead({

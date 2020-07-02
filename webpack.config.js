@@ -7,8 +7,7 @@ let MinifyList = {}
 
 if (process.env.NODE_ENV == "production") {
     MinifyList = {
-        "typeahead.min": "./src/index.ts",
-        "typeahead.min": "./src/sass/Typeahead.scss",
+        "typeahead.min": ["./src/sass/Typeahead.scss", "./src/index.ts"],
     }
 }
 
@@ -16,8 +15,7 @@ module.exports = {
     mode: process.env.NODE_ENV == "production" ? "production" : "development",
     devtool: "source-map",
     entry: {
-        "typeahead": "./src/index.ts",
-        "typeahead": "./src/sass/Typeahead.scss",
+        "typeahead": ["./src/sass/Typeahead.scss", "./src/index.ts"],
         ...MinifyList
     },
     output: {
